@@ -19,7 +19,6 @@ namespace Punch.ViewModels
     {
         private readonly IUserTaskService _userTaskService;
 
-
         private bool _chronoStarted;
 
         public bool ChronoStarted { 
@@ -93,9 +92,6 @@ namespace Punch.ViewModels
 
             ElementCompositionPreview.SetAppWindowContent(appWindow, appWindowContentFrame);
             await appWindow.TryShowAsync();
-
-            //var addDialog = new AddUserTask();
-
 
         }
     }

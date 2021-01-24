@@ -13,55 +13,121 @@ namespace Punch.ViewModels
     public class ChronometerViewModel : ViewModelBase
     {
 
+        public enum ChronometerStates { Playing, Paused, Cancelled, Done}
 
-        private Visibility _started;
-        private Visibility _stopped;
+        private Visibility _chronometerVisibility;
+        private Visibility _playBtnVisibility;
+        private Visibility _pauseBtnVisibility;
+        private Visibility _cancelBtnVisibility;
+        private Visibility _doneBtnVisibility;
 
-        public Visibility Started
+        public Visibility ChronometerVisibility
         {
-            get { return _started; }
-            set { Set(ref _started, value); }
+            get { return _chronometerVisibility; }
+            set { Set(ref _chronometerVisibility, value); }
         }
 
-        public Visibility Stopped
+        public Visibility PlayBtnVisibility
         {
-            get { return _stopped; }
-            set { Set(ref _stopped, value); }
+            get { return _playBtnVisibility; }
+            set { Set(ref _playBtnVisibility, value); }
+        }
+
+        public Visibility PauseBtnVisibility
+        {
+            get { return _pauseBtnVisibility; }
+            set { Set(ref _pauseBtnVisibility, value); }
+        }
+
+        public Visibility CancelBtnVisibility
+        {
+            get { return _cancelBtnVisibility; }
+            set { Set(ref _cancelBtnVisibility, value); }
+        }
+
+        public Visibility DoneBtnVisibility
+        {
+            get { return _doneBtnVisibility; }
+            set { Set(ref _doneBtnVisibility, value); }
         }
 
         public ChronometerViewModel()
         {
 
             StartChronometerCommand = new RelayCommand(StartChronometer, CanStartChronometer);
-            StopChronometerCommand = new RelayCommand(StopChronometer, CanStopChronometer);
+            PauseChronometerCommand = new RelayCommand(PauseChronometer, CanPauseChronometer);
+            CancelChronometerCommand = new RelayCommand(CancelChronometer, CanCancelChronometer);
+            DoneChronometerCommand = new RelayCommand(DoneChronometer, CanDoneChronometer);
 
-            Started = Visibility.Collapsed;
-            Stopped = Visibility.Visible;
+            ChronometerVisibility = Visibility.Collapsed;
+            PlayBtnVisibility = Visibility.Visible;
+            PauseBtnVisibility = Visibility.Collapsed;
+            CancelBtnVisibility = Visibility.Collapsed;
+            DoneBtnVisibility = Visibility.Collapsed;
         }
 
         public RelayCommand StartChronometerCommand { get; private set; }
-        public RelayCommand StopChronometerCommand { get; private set; }
-
-        private bool CanStartChronometer ()
-        {
-            return true;
-        }
+        public RelayCommand PauseChronometerCommand { get; private set; }
+        public RelayCommand CancelChronometerCommand { get; private set; }
+        public RelayCommand DoneChronometerCommand { get; private set; }
 
         private void StartChronometer()
         {
-            Started = Visibility.Visible;
-            Stopped = Visibility.Collapsed;
+            ChronometerVisibility = Visibility.Visible;
+            PlayBtnVisibility = Visibility.Collapsed;
+            PauseBtnVisibility = Visibility.Visible;
+            CancelBtnVisibility = Visibility.Visible;
+            DoneBtnVisibility = Visibility.Collapsed;
         }
 
-        private bool CanStopChronometer()
+        private bool CanStartChronometer()
         {
             return true;
         }
 
-        private void StopChronometer()
+        private void PauseChronometer()
         {
-            Stopped = Visibility.Visible;
-            Started = Visibility.Collapsed;
+            ChronometerVisibility = Visibility.Visible;
+            PlayBtnVisibility = Visibility.Visible;
+            PauseBtnVisibility = Visibility.Collapsed;
+            CancelBtnVisibility = Visibility.Collapsed;
+            DoneBtnVisibility = Visibility.Visible;
         }
+
+        private bool CanPauseChronometer()
+        {
+            return true;
+        }
+
+        private void CancelChronometer()
+        {
+            HideChronometer();
+        }
+
+        private bool CanCancelChronometer()
+        {
+            return true;
+        }
+
+        private void DoneChronometer()
+        {
+            HideChronometer();
+        }
+
+        private bool CanDoneChronometer()
+        {
+            return true;
+        }
+
+        private void HideChronometer()
+        {
+            ChronometerVisibility = Visibility.Collapsed;
+            PlayBtnVisibility = Visibility.Visible;
+            PauseBtnVisibility = Visibility.Collapsed;
+            CancelBtnVisibility = Visibility.Collapsed;
+            DoneBtnVisibility = Visibility.Collapsed;
+        }
+
+       
     }
 }

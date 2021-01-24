@@ -23,15 +23,14 @@
             <TextBlock>TIME PUNCHER</TextBlock>
         </Grid>
         <Grid Grid.Row="1" DataContext="{Binding Source={StaticResource ViewModelLocator}, Path=Chronometer}">
-            <StackPanel Orientation="Horizontal" VerticalAlignment="Center" Visibility="{Binding Stopped}">
-            <Button Command="{Binding StartChronometerCommand}">START</Button>
+
+          <StackPanel Orientation="Horizontal" VerticalAlignment="Center" >
+            <Button Visibility="{Binding DoneBtnVisibility}" Command="{Binding DoneChronometerCommand}">DONE</Button>
+            <Button Visibility="{Binding CancelBtnVisibility}" Command="{Binding CancelChronometerCommand}">CANCEL</Button>
+            <TextBlock Visibility="{Binding ChronometerVisibility}">01:24:42</TextBlock>
+            <Button Visibility="{Binding PlayBtnVisibility}" Command="{Binding StartChronometerCommand}">PLAY</Button>
+            <Button Visibility="{Binding PauseBtnVisibility}"  Command="{Binding PauseChronometerCommand}">PAUSE</Button>
           </StackPanel>
-          <StackPanel Orientation="Horizontal" VerticalAlignment="Center" Visibility="{Binding Started}">
-            <Button>CANCEL</Button>
-            <TextBlock>01:24:42</TextBlock>
-            <Button  Command="{Binding StopChronometerCommand}">DONE</Button>
-          </StackPanel>
-          
         </Grid>
         <Grid Grid.Row="2">
 

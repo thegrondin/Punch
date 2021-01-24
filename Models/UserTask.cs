@@ -13,8 +13,5 @@ namespace Punch.Models
         public TimeSpan Duration { get; set; }
         public string Name { get; set; }
         public string Description { get; set; }
-
-
-
     }
 }
