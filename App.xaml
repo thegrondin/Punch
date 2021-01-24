@@ -1,0 +1,15 @@
+﻿<Application
+    x:Class="Punch.App"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:viewModels="using:Punch.ViewModels"
+    xmlns:local="using:Punch">
+
+    <Application.Resources>
+        <viewModels:ViewModelLocator x:Key="ViewModelLocator" />
+
+    </Application.Resources>
+
+
+
+</Application>
