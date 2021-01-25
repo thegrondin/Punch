@@ -3,9 +3,11 @@ using GalaSoft.MvvmLight.Command;
 using Punch.Models;
 using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Timers;
 using Windows.UI.Xaml;
 
 namespace Punch.ViewModels
@@ -14,6 +16,8 @@ namespace Punch.ViewModels
     {
 
         public enum ChronometerStates { Playing, Paused, Cancelled, Done}
+
+        private ChronometerStates CurrentState { get; set; }
 
         private Visibility _chronometerVisibility;
         private Visibility _playBtnVisibility;
@@ -51,6 +55,28 @@ namespace Punch.ViewModels
             set { Set(ref _doneBtnVisibility, value); }
         }
 
+        private DispatcherTimer _timer;
+        private DateTime _startTime;
+        private DateTime _pauseStartTime;
+
+        private TimeSpan _elapsedTime;
+        public TimeSpan ElapsedTime {
+            get { return _elapsedTime; }
+            set { Set(ref _elapsedTime, value); }
+        }
+
+
+        private TimeSpan _currentPausedTime;
+        private TimeSpan _accumulatedPauseTime;
+
+
+        private string _elapsedTimeString;
+        public string ElapsedTimeString
+        {
+            get { return _elapsedTimeString; }
+            set { Set(ref _elapsedTimeString, value); }
+        }
+
         public ChronometerViewModel()
         {
 
@@ -59,11 +85,30 @@ namespace Punch.ViewModels
             CancelChronometerCommand = new RelayCommand(CancelChronometer, CanCancelChronometer);
             DoneChronometerCommand = new RelayCommand(DoneChronometer, CanDoneChronometer);
 
+            _timer = new DispatcherTimer();
+
+           
+
+            _timer.Tick += new EventHandler<object>(UpdateTimeEvent);
+            _timer.Interval = new TimeSpan(0, 0, 1);           
+            
             ChronometerVisibility = Visibility.Collapsed;
             PlayBtnVisibility = Visibility.Visible;
             PauseBtnVisibility = Visibility.Collapsed;
             CancelBtnVisibility = Visibility.Collapsed;
             DoneBtnVisibility = Visibility.Collapsed;
+        }
+
+        public  void UpdateTimeEvent(object source, object e)
+        {
+
+            if (CurrentState == ChronometerStates.Paused)
+            {
+                _currentPausedTime = (DateTime.Now - _pauseStartTime);
+            }
+
+            ElapsedTime = (DateTime.Now - _startTime) - (_currentPausedTime + _accumulatedPauseTime);
+            ElapsedTimeString = ElapsedTime.ToString();
         }
 
         public RelayCommand StartChronometerCommand { get; private set; }
@@ -73,6 +118,16 @@ namespace Punch.ViewModels
 
         private void StartChronometer()
         {
+
+            if (CurrentState != ChronometerStates.Paused)
+            {
+                _startTime = DateTime.Now;
+            }
+
+            CurrentState = ChronometerStates.Playing;
+
+            _timer.Start();
+
             ChronometerVisibility = Visibility.Visible;
             PlayBtnVisibility = Visibility.Collapsed;
             PauseBtnVisibility = Visibility.Visible;
@@ -87,6 +142,12 @@ namespace Punch.ViewModels
 
         private void PauseChronometer()
         {
+
+            CurrentState = ChronometerStates.Paused;
+
+            _pauseStartTime = DateTime.Now;
+            _accumulatedPauseTime += _currentPausedTime;
+
             ChronometerVisibility = Visibility.Visible;
             PlayBtnVisibility = Visibility.Visible;
             PauseBtnVisibility = Visibility.Collapsed;
@@ -101,6 +162,8 @@ namespace Punch.ViewModels
 
         private void CancelChronometer()
         {
+            CurrentState = ChronometerStates.Cancelled;
+            ResetChronometer();
             HideChronometer();
         }
 
@@ -111,6 +174,8 @@ namespace Punch.ViewModels
 
         private void DoneChronometer()
         {
+            CurrentState = ChronometerStates.Done;
+            ResetChronometer();
             HideChronometer();
         }
 
@@ -126,6 +191,13 @@ namespace Punch.ViewModels
             PauseBtnVisibility = Visibility.Collapsed;
             CancelBtnVisibility = Visibility.Collapsed;
             DoneBtnVisibility = Visibility.Collapsed;
+        }
+
+        private void ResetChronometer()
+        {
+            _timer.Stop();
+            ElapsedTime = new TimeSpan();
+            ElapsedTimeString = "00:00:00";
         }
 
        
