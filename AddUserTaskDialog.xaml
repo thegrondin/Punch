@@ -1,0 +1,42 @@
+﻿<ContentDialog
+    x:Class="Punch.AddUserTaskDialog"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:local="using:Punch"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    mc:Ignorable="d"
+    Title="ADD A NEW TASK"
+    PrimaryButtonText="CANCEL"
+    SecondaryButtonText="CONFIRM"
+    DataContext="{Binding Source={StaticResource ViewModelLocator}, Path=UserTask}"
+    SecondaryButtonCommand="{Binding AddUserTaskCommand}"
+>
+
+    <Grid>
+      <Grid.RowDefinitions>
+        <RowDefinition Height="*"/>
+        <RowDefinition Height="50"/>
+      </Grid.RowDefinitions>
+
+      <Grid Grid.Row="0">
+        <Grid.ColumnDefinitions>
+          <ColumnDefinition Width="*"/>
+        </Grid.ColumnDefinitions>
+        <Grid.RowDefinitions>
+          <RowDefinition Height="*"/>
+          <RowDefinition Height="*"/>
+          <RowDefinition Height="*"/>
+          <RowDefinition Height="*"/>
+        </Grid.RowDefinitions>
+
+        <TextBox Margin="2" Grid.Row="0" Grid.Column="1" Text="{Binding CurrentUserTask.Name, Mode=TwoWay}" Header="Name:"  />
+        <TimePicker Margin="2" Grid.Row="1" Grid.Column="1" Header="Start: " Time="{Binding CurrentUserTask.Start, Mode=TwoWay}"></TimePicker>
+        <TimePicker Margin="2" Grid.Row="2" Grid.Column="1" Header="End: " Time="{Binding CurrentUserTask.End, Mode=TwoWay}"></TimePicker>
+        <TextBox Margin="2" Grid.Row="3" Grid.Column="1" Header="Description:" Text="{Binding CurrentUserTask.Description, Mode=TwoWay}"/>
+      </Grid>
+
+
+
+    </Grid>
+</ContentDialog>

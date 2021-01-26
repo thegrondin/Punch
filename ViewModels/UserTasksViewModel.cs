@@ -83,15 +83,9 @@ namespace Punch.ViewModels
 
         private async void DisplayAddTaskBox()
         {
+            var contentDialog = new AddUserTaskDialog();
 
-            AppWindow appWindow = await AppWindow.TryCreateAsync();
-
-            Frame appWindowContentFrame = new Frame();
-        
-            appWindowContentFrame.Navigate(typeof(AddUserTask));
-
-            ElementCompositionPreview.SetAppWindowContent(appWindow, appWindowContentFrame);
-            await appWindow.TryShowAsync();
+            await contentDialog.ShowAsync();
 
         }
     }
